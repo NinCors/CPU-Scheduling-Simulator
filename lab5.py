@@ -25,7 +25,6 @@ def sortData(data,index):
     tmp_data = []
     largest = -1
     for d in range(1,data[0][0]+1):
-
         if data[d][index] > largest:
             largest = data[d][index]
             tmp_data.append(data[d])
@@ -35,6 +34,12 @@ def sortData(data,index):
                 if data[d][index] < tmp_data[w][index] and find == False:
                     tmp_data.insert(w,data[d])
                     find = True
+
+    for d in range(0,data[0][0]):
+        if tmp_data[d][2] == 0:
+            dataa = tmp_data.pop(d)
+            tmp_data.insert(0,dataa)
+
     print(tmp_data)
     return tmp_data
 
@@ -82,6 +87,21 @@ def RR(data,time_quantum):
 def SJF(data):
 
     tmp_data = sortData(data,2)
+    for d in tmp_data:
+        tmp_output = []
+        endTime = startTime + d[2] # end = start + burst_Time
+        waitingTime = startTime - d[1] # wait_time = start - arrival_Time
+        tmp_output.append(d[0])
+        tmp_output.append(d[1])
+        tmp_output.append(startTime)
+        tmp_output.append(endTime)
+        tmp_output.append(d[2])
+        tmp_output.append(waitingTime)  
+        output_data.append(tmp_output)
+        totalWaitTime = totalWaitTime + waitingTime # record total wait time
+        startTime = endTime # update start time to end time   
+
+    return toString(output_data,totalWaitTime/data[0][0])
 
 
 
