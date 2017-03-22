@@ -103,11 +103,15 @@ def SJF(data):
 
     return toString(output_data,totalWaitTime/data[0][0])
 
+'''
+Todo: add new arrival status to record if the process actually arrive
+rebuild the function based on time.
+implement Round robin tomorrow
+'''
 
 
 
 def runner():
-
     if len(sys.argv) == 3:
         if sys.argv[2] == 'FCFS':
             data = get_data()
