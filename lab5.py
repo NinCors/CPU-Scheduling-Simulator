@@ -107,6 +107,7 @@ def SJF(data):
 Todo: add new arrival status to record if the process actually arrive
 rebuild the function based on time.
 implement Round robin tomorrow
+Just tyr
 '''
 
 
