@@ -80,7 +80,7 @@ def FCFS(data):
     output_data = []
     startTime = 0
     endTime = 0
-    totalWaitTime = 0
+    totalWaitTime = 0.0
 
     for d in process_data:
         tmp_output = []
@@ -181,7 +181,6 @@ def SJF(data):
 
 
 def runner():
-    print(sys.argv)
     if len(sys.argv) == 3:
         if sys.argv[2] == 'FCFS':
             data1 = get_data()
