@@ -125,15 +125,6 @@ def pop_arrive(content):
     arrived.pop(index)
 
 
-'''
-Todo: add new arrival status to record if the process actually arrive
-rebuild the function based on time.
-implement Round robin tomorrow
-Just tyr
-'''
-
-
-
 def runner():
     if len(sys.argv) == 3:
         if sys.argv[2] == 'FCFS':
