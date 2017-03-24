@@ -8,6 +8,9 @@ data = []
 process_data = []
 arrived = []
 s1 = '\nPID  ArrivalTime  StartTime  EndTime  Runningtime  WaitingTime\n'
+s2 = '\nPID  StartTIme  EndTime  RunningTime\n'
+s3 = '\nPID  ArrivalTime  RunningTime  EndTime  WaitingTime\n '
+
 
 def get_data():
     file_path = os.getcwd() + "/" + sys.argv[1]
@@ -27,7 +30,9 @@ def get_data():
         exit()
     return data
 
-def checkArrive(currentTime):
+def checkArrive(data, currentTime):
+    print("current data is")
+    print(data)
     for process in data:
         if process[1] <= currentTime and process[3] == 'False':
             process[3] = 'True'
@@ -85,12 +90,67 @@ def FCFS(data):
 
 
 
-#def RR(data):
-        
+def RR(data):
+    quantum = int(sys.argv[3])
+    
+    startTime = 0
+    endTime = 0
+    
+    output1 = []# pid startT endT runningT
+    output2 = sortData(data,1)# pid arrivalT runningT EndT WaitT
 
+    tmp_d = []
+    count = len(data)
+    print("\nBEGIN!!\n")
+    while(count > 0):
+        tmp_output = []
+        checkArrive(data, startTime)
+        # if the last one is not finished, then append it in the end
+        if len(tmp_d) != 0:
+            arrived.append(tmp_d)
+      
+        print("Arrival is ")
+        print(arrived)
+        # if burst time - start time bigger than quantum, then endtime = start + quantum
+        # runningtime = end - start
+        tmp_output.append(arrived[0][0])# pid
+        tmp_output.append(startTime)
+        if arrived[0][2] > quantum:
+            endTime = startTime + quantum
+            arrived[0][2] = arrived[0][2] - quantum # update the left running time
+            # Not finished for this one, move to the end of query
+            tmp_d = []
+            for w in arrived[0]:
+                tmp_d.append(w)
+            arrived.pop(0)
 
+        else:
+            endTime = arrived[0][2] + startTime
+            insertValue(arrived[0][0],endTime,output2)
+            count = count - 1
+            tmp_d = []
+            arrived.pop(0)
+        runningTime = endTime - startTime
+        print("In this round %d, start is %d, end is %d, quanTum is %d\n"%(count,startTime,endTime,quantum))
+        tmp_output.append(endTime)
+        tmp_output.append(runningTime)
+        output1.append(tmp_output)
+        startTime = endTime
 
+    totalWait = 0.0
+    for d in output2:
+        totalWait = totalWait + d[4]
+    averageW = totalWait/len(output2)
 
+    return toString(output1,-1,s2),toString(output2,averageW,s3)
+
+def insertValue(pid,endTime,output):
+    for d in output:
+        if d[0] == pid:
+            d.pop()
+            d.append(endTime)
+            waitingTime = endTime - d[2] - d[1]
+            d.append(waitingTime)
 
 def SJF(data):
     process_data = sortData(data,1)
@@ -100,7 +160,7 @@ def SJF(data):
     output_data = []
     count = 0
     while(count < len(process_data)):
-        checkArrive(startTime)
+        checkArrive(data, startTime)
         tmp_arrived = sortData(arrived, 2)
         tmp_output = []
         endTime = startTime + tmp_arrived[0][2]
@@ -128,14 +188,17 @@ def pop_arrive(content):
 
 
 def runner():
+    print(sys.argv)
     if len(sys.argv) == 3:
         if sys.argv[2] == 'FCFS':
-            data = get_data()
+            data1 = get_data()
+            data = sortData(data1,1)
             outPut = FCFS(data)            
             print(outPut)
 
         elif sys.argv[2] == 'SJF':
-            data = get_data()
+            data1 = get_data()
+            data = sortData(data1,1)           
             outPut = SJF(data)            
             print(outPut)
 
@@ -143,7 +206,10 @@ def runner():
             print("Unknow algorithm name")
 
     elif len(sys.argv) == 4 and sys.argv[2] == 'RR':
-        print("")
+        data1 = get_data()
+        data = sortData(data1,1)
+        outPut = RR(data)
+        print(outPut)
 
     else:
         print("wrong input argument!")
