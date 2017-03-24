@@ -7,6 +7,7 @@ import os
 data = []
 process_data = []
 arrived = []
+s1 = '\nPID  ArrivalTime  StartTime  EndTime  Runningtime  WaitingTime\n'
 
 def get_data():
     file_path = os.getcwd() + "/" + sys.argv[1]
@@ -50,8 +51,7 @@ def sortData(data,index):
     print(sort_data)
     return sort_data
 
-def toString(outPut, averageWait):
-    string = '\nPID  ArrivalTime  StartTime  EndTime  Runningtime  WaitingTime\n'
+def toString(outPut, averageWait,string):
     for info in outPut:
         for num in info:
             string = string + str(num) + '         '
@@ -81,14 +81,16 @@ def FCFS(data):
         totalWaitTime = totalWaitTime + waitingTime # record total wait time
         startTime = endTime # update start time to end time   
 
-    return toString(output_data,totalWaitTime/len(data))
+    return toString(output_data,totalWaitTime/len(data),s1)
 
 
-'''
-s
-def RR(data,time_quantum):
-    
-'''
+
+#def RR(data):
+        
+
+
+
+
 
 def SJF(data):
     process_data = sortData(data,1)
@@ -114,7 +116,7 @@ def SJF(data):
         pop_arrive(tmp_arrived.pop(0))      
         count = count + 1
         totalWaitTime = totalWaitTime + waitingTime
-    return toString(output_data, totalWaitTime/len(data))
+    return toString(output_data, totalWaitTime/len(data),s1)
 
 
 def pop_arrive(content):
